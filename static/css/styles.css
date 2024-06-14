@@ -1,4 +1,237 @@
-/* styles.css */
 body {
-    padding-top: 56px;
+    height: 100vh; /* 100% of the viewport height */
+    margin: 0; /* Remove default margin */
+    background-color: #f8f9fa; /* Optional background color */
+    font-family: Arial, sans-serif;
+}
+
+.navbar {
+    background-color: #b8ff05b8;
+    padding: 1em;
+}
+
+.navbar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    font-size: small;
+}
+
+.nav-item {
+    margin-right: 1em;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+    font-size: small;
+}
+
+.nav-link:hover {
+    text-decoration: underline;
+}
+
+.flashes {
+    list-style-type: none;
+    padding: 0;
+}
+
+.flash-error {
+    color: red;
+}
+
+.flash-success {
+    color: green;
+}
+
+.container {
+    margin-top: 10px;
+    padding: 10px;
+}
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 8px;
+    margin-bottom: 10px;
+    margin-top: 1px;
+}
+
+.card-title {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+}
+
+.assumido-por{
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 3px;
+    margin-top: 3px;
+    font-size: small;
+    color: rgba(2, 2, 2, 0.687);
+    align-items: center;
+    display: flex;
+}
+
+.card-descricao{
+    margin-top: 3px;
+    font-size: small;
+    color: rgba(2, 2, 2, 0.687);
+    align-items: center;
+    display: flex;  
+}
+.card-status{
+    margin-top: 3px;
+    font-size: small;
+    color: rgba(2, 2, 2, 0.687);
+    align-items: center;
+    display: flex;  
+}
+
+.processo-status {
+    color: rgb(20, 4, 145);
+}
+.pendente-status {
+    color: rgb(160, 93, 0);
+}
+.gerado-por{
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 3px;
+    margin-top: 3px;
+    font-size: small;
+    color: rgba(2, 2, 2, 0.687);
+    align-items: center;
+    display: flex;
+}
+.card-text {
+    margin-bottom: 2px;
+    margin-top: 2px;
+    font-size: small;
+    color: black;
+    align-items: center;
+    display: block;
+}
+
+.card-text small {
+    color: #273e52;
+}
+
+.button {
+    padding: 10px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8em;
+}
+
+.button-warning {
+    margin-top: 5px;
+    background-color: #3115b9;
+    color: white;
+}
+
+.button-success {
+    margin-top: 5px;
+    background-color: #28a745;
+    color: white;
+    
+}
+
+.button-secondary {
+    background-color: #758fa5;
+    color: white;
+    margin-top: 5px;
+}
+
+.button-primary {
+    background-color: #023265;
+    color: white;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-top: 60px;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 15px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 5px;
+}
+
+.modal-title{
+    font-size: x-large;
+}
+.closexx {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.listausuarios{
+    font-size: medium;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.login-container {
+    position: absolute;
+    top: 50%; /* Centraliza verticalmente */
+    left: 50%; /* Centraliza horizontalmente */
+    transform: translate(-50%, -50%); /* Corrige a posição para o centro */
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px; /* Largura fixa */
+    max-width: 100%; /* Largura máxima */
+    box-sizing: border-box; /* Inclui padding na largura total */
+}
+.a-log{
+    font-size: small;    
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;    ;
 }

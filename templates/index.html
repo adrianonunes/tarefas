@@ -3,20 +3,48 @@
 {% block content %}
 <div class="row">
     <div class="col-md-12">
-        <h2>Tarefas</h2>
         <div id="tarefas">
             {% for tarefa in tarefas %}
-            <div class="card mt-3">
+            <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">{{ tarefa.Titulo }}</h5>
-                    <p class="card-text">{{ tarefa.Descricao }}</p>
-                    <p class="card-text"><small class="text-muted">Status: {{ tarefa.Status }}</small></p>
-                    {% if tarefa.Status == 'PENDENTE' %}
-                    <button class="btn btn-warning em-processo-btn" data-id="{{ tarefa.ID }}" data-toggle="modal" data-target="#modalEmProcesso">Em Processo</button>
-                    {% endif %}
-                    {% if tarefa.Status == 'PROCESSO' %}
-                    <a href="{{ url_for('concluir_tarefa', tarefa_id=tarefa.ID) }}" class="btn btn-success">Concluir</a>
-                    {% endif %}
+                    <h1 class="card-title">{{ tarefa.Titulo }}</h1>
+                    <div class="card-descricao">
+                      <p class="card-text"><small>{{ tarefa.Descricao }}</small></p>
+                    </div>                                          
+                    <div class="card-status">  
+                      {% if tarefa.Status == 'PENDENTE' %}                    
+                         <img src="{{ url_for('static', filename='imagens/hora.png') }}" style="width: 16px; height: 16px;">                   
+                         <p>&nbsp</p>
+                         <p><small class="text-muted pendente-status">STATUS: {{ tarefa.Status }}</small></p>
+                      {% endif %}    
+                      {% if tarefa.Status == 'PROCESSO' %}                    
+                         <img src="{{ url_for('static', filename='imagens/carregando.png') }}" style="width: 16px; height: 16px;">                   
+                         <p>&nbsp</p>
+                         <p><small class="text-muted processo-status">STATUS: {{ tarefa.Status }}</small></p>
+                      {% endif %}    
+                                                                  
+                    </div>    
+                    {% if tarefa.QuemAssumiu %}                
+                      <div class="assumido-por">
+                        <img src="{{ url_for('static', filename='imagens/' ~ tarefa.QuemAssumiu ~ '.png') }}" alt="Sem Imagem" style="width: 48px; height: 48px;">                   
+                        <a>&nbsp</a>
+                        <small>ASSUMIDO POR {{ tarefa.QuemAssumiu }}</small>                                      
+                      </div> 
+                    {% endif %}                   
+                    <div class="gerado-por">
+                        <img src="{{ url_for('static', filename='imagens/' ~ tarefa.Operador ~ '.png') }}" alt="Sem Imagem" style="width: 48px; height: 48px;">                   
+                        <a>&nbsp</a>
+                        <small>GERADO POR {{ tarefa.Operador }}</small>                                      
+                    </div>     
+                    <div>               
+                      {% if tarefa.Status == 'PENDENTE' %}
+                        <button class="button button-warning em-processo-btn" data-id="{{ tarefa.ID }}">Assumir</button>
+                      {% endif %}
+                      {% if tarefa.Status == 'PROCESSO' %}    
+                        <button class="button button-success" onclick="location.href='{{ url_for('concluir_tarefa', tarefa_id=tarefa.ID) }}'">Concluir</button>
+                        <button class="button button-secondary" onclick="location.href='{{ url_for('colocar_pendente', tarefa_id=tarefa.ID) }}'">Pendente</button>                                            
+                      {% endif %}                    
+                    </div>  
                 </div>
             </div>
             {% endfor %}
@@ -25,67 +53,65 @@
 </div>
 
 <!-- Modal Criar Tarefa -->
-<div class="modal fade" id="modalCriarTarefa" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
+
+<div id="modalCriarTarefa" class="modal">
+  <div class="modal-content">
+      <div class="modal-header">
+          <span class="close" data-dismiss="modal">&times;</span>
+          <h1 class="modal-title">Criar Tarefa</h1>
+      </div>
       <form action="/criar" method="post">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Criar Tarefa</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
         <div class="modal-body">
+          <div class="form-group">            
+            <select class="listausuarios" id="destinado" name="destinado" required>
+              <option value="">Selecione um Destinatário</option>
+          </select>
+        </div>
           <div class="form-group">
             <label for="titulo">Título</label>
-            <input type="text" class="form-control" id="titulo" name="titulo" required>
+            <input type="text" id="titulo" name="titulo" required>
           </div>
           <div class="form-group">
             <label for="descricao">Descrição</label>
-            <textarea class="form-control" id="descricao" name="descricao" rows="3" required></textarea>
+            <textarea id="descricao" name="descricao" rows="3" required></textarea>
           </div>
           <div class="form-group">
             <label for="nome_do_operador">Nome do Operador</label>
-            <input type="text" class="form-control" id="nome_do_operador" name="nome_do_operador" required>
+            <input type="text" id="nome_do_operador" name="nome_do_operador" required value="{{ session['user'] }}" readonly>
           </div>
           <div class="form-group">
             <label for="loja">Loja</label>
-            <input type="text" class="form-control" id="loja" name="loja" required>
+            <input type="text" id="loja" name="loja" required>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-          <button type="submit" class="btn btn-primary">Salvar</button>
+          <button type="button" class="button button-secondary close" data-dismiss="modal">Fechar</button>
+          <button type="submit" class="button button-primary">Salvar</button>
         </div>
       </form>
     </div>
-  </div>
 </div>
 
 <!-- Modal Em Processo -->
-<div class="modal fade" id="modalEmProcesso" tabindex="-1" aria-labelledby="modalEmProcessoLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
+<div id="modalEmProcesso" class="modal">
+  <div class="modal-content">
+      <div class="modal-header">
+          <span class="close" data-dismiss="modal">&times;</span>
+          <h5 class="modal-title">Assumir Tarefa</h5>
+      </div>
       <form id="formEmProcesso" action="/em_processo" method="post">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalEmProcessoLabel">Assumir Tarefa</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
         <div class="modal-body">
           <input type="hidden" id="tarefaId" name="tarefa_id">
           <div class="form-group">
             <label for="quem_assumiu">Nome do Operador</label>
-            <input type="text" class="form-control" id="quem_assumiu" name="quem_assumiu" required>
+            <input type="text" id="quem_assumiu" name="quem_assumiu" required value="{{ session['user'] }}" readonly>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-          <button type="submit" class="btn btn-primary">Salvar</button>
+          <button type="button" class="button button-secondary close" data-dismiss="modal">Fechar</button>
+          <button type="submit" class="button button-primary">Salvar</button>
         </div>
       </form>
     </div>
-  </div>
 </div>
 {% endblock %}

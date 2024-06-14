@@ -3,36 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Manager</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>HALLSTACK</title>
+    <link rel="icon" href="{{ url_for('static', filename='/imagens/tarefas.ico') }}" type="image/x-icon">
     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/pendentes">Inicio</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" id="criar-tarefa-btn">Criar Tarefa</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/processo">Ver Tarefas Em Processo</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/pendentes">Pendentes</a>
-                </li>
-            </ul>
+    <nav class="navbar">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="#" id="criar-tarefa-btn">Criar</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/processo">Produzindo</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/pendentes">Pendentes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/aguardando">Aguardando</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/meuscards">Meus Pedidos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/meu_perfil">Meu perfil</a>
+            </li>
+        </ul>
+        <div>
+            {% if 'user' in session %}
+                {% if session['icon'] %}
+                  <img src="{{ url_for('static', filename='imagens/'~session['icon']) }}" alt="">
+                {% endif %}
+                <a>{{ session['user'] }}</a>                
+                <a class="a-log" href="{{ url_for('logout') }}">Logout</a>
+            {% else %}
+                <a class="a-log" href="{{ url_for('login') }}">Login</a>
+            {% endif %}
         </div>
     </nav>
     <div class="container mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                        <li class="flash-{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
         {% block content %}{% endblock %}
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
 </html>
